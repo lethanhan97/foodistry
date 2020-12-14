@@ -8,7 +8,7 @@ import { Restaurant } from '../restaurants.model';
 })
 export class RestaurantsListPageComponent implements OnInit {
   restaurants: Restaurant[] = [];
-  selectedRestaurant: Restaurant | null = null;
+  selectedRestaurant: Restaurant;
 
   constructor() {}
 
@@ -19,8 +19,8 @@ export class RestaurantsListPageComponent implements OnInit {
         id: 1,
         name: 'Hokkaido Ya',
         coords: {
-          lat: 0,
-          long: 0,
+          lat: 1.2647429224316011,
+          long: 103.82143514603271,
         },
         cuisine: 'Japanese',
       },
@@ -28,17 +28,17 @@ export class RestaurantsListPageComponent implements OnInit {
         id: 2,
         name: 'The Feather Blade',
         coords: {
-          lat: 0,
-          long: 0,
+          lat: 1.2820823574323867,
+          long: 103.84560301323405,
         },
         cuisine: 'Japanese',
       },
       {
         id: 3,
-        name: 'Hamburg Keiseuke',
+        name: 'Hamburg Steak Keisuke',
         coords: {
-          lat: 0,
-          long: 0,
+          lat: 1.2776690579708287,
+          long: 103.84474245556184,
         },
         cuisine: 'Japanese',
       },

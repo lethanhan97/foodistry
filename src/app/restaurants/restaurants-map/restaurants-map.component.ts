@@ -1,5 +1,12 @@
-import { Component, AfterViewInit, Input } from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  OnChanges,
+  Input,
+  SimpleChanges,
+} from '@angular/core';
 import * as L from 'leaflet';
+import 'leaflet.markercluster';
 import { Restaurant } from '../restaurants.model';
 
 @Component({
@@ -7,16 +14,30 @@ import { Restaurant } from '../restaurants.model';
   templateUrl: './restaurants-map.component.html',
   styleUrls: ['./restaurants-map.component.scss'],
 })
-export class RestaurantsMapComponent implements AfterViewInit {
+export class RestaurantsMapComponent implements AfterViewInit, OnChanges {
   @Input() selectedRestaurant: Restaurant;
   map: L.Map;
   currentCoords: L.LatLng;
+  currentMarkerCluster: L.MarkerClusterGroup;
 
   constructor() {}
 
   ngAfterViewInit(): void {
     this.initMap();
     this.getCurrentLocation();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.selectedRestaurant.currentValue) {
+      // Zoom in on selected restaurant
+      const { lat, long } = changes.selectedRestaurant.currentValue.coords;
+      const coords: L.LatLng = new L.LatLng(lat, long);
+
+      this.addMarker(lat, long, 'point');
+      this.map.setView(coords, 14);
+    } else {
+      // Display all restaurant markers
+    }
   }
 
   private getCurrentLocation(): void {
@@ -27,7 +48,6 @@ export class RestaurantsMapComponent implements AfterViewInit {
 
         this.currentCoords = coords;
         this.map.setView(coords, 14);
-        this.addMarker(latitude, longitude);
       });
     } else {
       console.log('geolocation not available');
@@ -57,8 +77,23 @@ export class RestaurantsMapComponent implements AfterViewInit {
     tiles.addTo(this.map);
   }
 
-  private addMarker(lat: number, long: number): void {
-    const marker = L.circleMarker([lat, long]);
-    marker.addTo(this.map);
+  private addMarker(lat: number, long: number, type: 'circle' | 'point'): void {
+    var markerCluster = L.markerClusterGroup();
+
+    if (this.currentMarkerCluster) {
+      this.map.removeLayer(this.currentMarkerCluster);
+    }
+
+    let marker;
+    if (type === 'circle') {
+      marker = L.circleMarker([lat, long]);
+    } else {
+      marker = L.marker([lat, long]);
+    }
+
+    markerCluster.addLayer(marker);
+    markerCluster.addTo(this.map);
+
+    this.currentMarkerCluster = markerCluster;
   }
 }
