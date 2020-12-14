@@ -1,26 +1,43 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, Input } from '@angular/core';
 import * as L from 'leaflet';
+import { Restaurant } from '../restaurants.model';
 
 @Component({
   selector: 'app-restaurants-map',
   templateUrl: './restaurants-map.component.html',
   styleUrls: ['./restaurants-map.component.scss'],
 })
-export class RestaurantsMapComponent implements OnInit, AfterViewInit {
-  map: L.Map | undefined;
+export class RestaurantsMapComponent implements AfterViewInit {
+  @Input() selectedRestaurant: Restaurant;
+  map: L.Map;
+  currentCoords: L.LatLng;
 
   constructor() {}
 
-  ngOnInit(): void {}
-
   ngAfterViewInit(): void {
     this.initMap();
+    this.getCurrentLocation();
+  }
+
+  private getCurrentLocation(): void {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        const coords: L.LatLng = new L.LatLng(latitude, longitude);
+
+        this.currentCoords = coords;
+        this.map.setView(coords, 14);
+        this.addMarker(latitude, longitude);
+      });
+    } else {
+      console.log('geolocation not available');
+    }
   }
 
   private initMap(): void {
     this.map = L.map('map', {
       center: [1.3521, 103.8198],
-      zoom: 15,
+      zoom: 14,
     });
 
     const tiles = L.tileLayer(
@@ -38,5 +55,10 @@ export class RestaurantsMapComponent implements OnInit, AfterViewInit {
     );
 
     tiles.addTo(this.map);
+  }
+
+  private addMarker(lat: number, long: number): void {
+    const marker = L.circleMarker([lat, long]);
+    marker.addTo(this.map);
   }
 }
