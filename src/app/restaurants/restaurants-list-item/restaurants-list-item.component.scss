@@ -1,0 +1,13 @@
+.wrapper {
+  padding: 1rem;
+  color: black;
+  transition: color 0.5s, background-color 0.5s;
+  &:hover {
+    cursor: pointer;
+    background-color: rgb(241, 241, 241);
+  }
+}
+
+.selected {
+  color: red;
+}

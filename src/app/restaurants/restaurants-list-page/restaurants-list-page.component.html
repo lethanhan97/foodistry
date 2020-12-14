@@ -3,6 +3,7 @@
     <app-restaurants-list-item
       *ngFor="let restaurant of restaurants"
       [restaurant]="restaurant"
+      [selected]="isSelected(restaurant)"
       (select)="onSelect($event)"
     >
     </app-restaurants-list-item>

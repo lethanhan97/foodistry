@@ -1,4 +1,7 @@
-<article (click)="onClick()">
+<article
+  (click)="onClick()"
+  [ngClass]="['wrapper', selected ? 'selected' : '']"
+>
   <header>
     <h2>{{ restaurant?.name }}</h2>
   </header>

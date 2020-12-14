@@ -8,6 +8,7 @@ import { Restaurant } from '../restaurants.model';
 })
 export class RestaurantsListItemComponent implements OnInit {
   @Input() restaurant: Restaurant | undefined;
+  @Input() selected: boolean = false;
   @Output() select: EventEmitter<Restaurant> = new EventEmitter<Restaurant>();
 
   constructor() {}

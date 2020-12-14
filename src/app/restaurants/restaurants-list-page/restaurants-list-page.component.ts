@@ -47,6 +47,10 @@ export class RestaurantsListPageComponent implements OnInit {
 
   onSelect(restaurant: Restaurant): void {
     this.selectedRestaurant = restaurant;
-    alert(`Selected restaurant is ${this.selectedRestaurant.name}`);
+  }
+
+  isSelected(restaurant: Restaurant): boolean {
+    if (!this.selectedRestaurant) return false;
+    return restaurant.id === this.selectedRestaurant.id;
   }
 }
