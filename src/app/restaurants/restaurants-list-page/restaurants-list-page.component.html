@@ -1,5 +1,12 @@
 <div class="wrapper">
-  <section>List</section>
+  <section>
+    <app-restaurants-list-item
+      *ngFor="let restaurant of restaurants"
+      [restaurant]="restaurant"
+      (select)="onSelect($event)"
+    >
+    </app-restaurants-list-item>
+  </section>
 
-  <section>Map</section>
+  <section style="background-color: yellow">Map</section>
 </div>

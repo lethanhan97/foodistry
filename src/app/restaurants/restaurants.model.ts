@@ -6,8 +6,8 @@ export interface Restaurant {
 }
 
 export interface Coords {
-  lat: string;
-  long: string;
+  lat: number;
+  long: number;
 }
 
 export type Cuisine =
