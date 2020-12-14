@@ -4,6 +4,7 @@ import { Route, RouterModule } from '@angular/router';
 import { RestaurantsListPageComponent } from './restaurants-list-page/restaurants-list-page.component';
 import { RestaurantsListItemComponent } from './restaurants-list-item/restaurants-list-item.component';
 import { RestaurantsMapComponent } from './restaurants-map/restaurants-map.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 const routes: Route[] = [
   {
@@ -18,7 +19,11 @@ const routes: Route[] = [
 ];
 
 @NgModule({
-  declarations: [RestaurantsListPageComponent, RestaurantsListItemComponent, RestaurantsMapComponent],
-  imports: [CommonModule, RouterModule.forChild(routes)],
+  declarations: [
+    RestaurantsListPageComponent,
+    RestaurantsListItemComponent,
+    RestaurantsMapComponent,
+  ],
+  imports: [CommonModule, RouterModule.forChild(routes), FontAwesomeModule],
 })
 export class RestaurantsModule {}

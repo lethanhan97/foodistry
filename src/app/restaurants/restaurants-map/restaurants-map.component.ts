@@ -8,6 +8,7 @@ import {
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
 import { Restaurant } from '../restaurants.model';
+import marker from '../../../assets/marker.svg';
 
 @Component({
   selector: 'app-restaurants-map',
@@ -19,6 +20,11 @@ export class RestaurantsMapComponent implements AfterViewInit, OnChanges {
   map: L.Map;
   currentCoords: L.LatLng;
   currentMarkerCluster: L.MarkerClusterGroup;
+  markerIcon: L.Icon = L.icon({
+    iconUrl: marker,
+    iconSize: [30, 42],
+    iconAnchor: [15, 42],
+  });
 
   constructor() {}
 
@@ -88,7 +94,7 @@ export class RestaurantsMapComponent implements AfterViewInit, OnChanges {
     if (type === 'circle') {
       marker = L.circleMarker([lat, long]);
     } else {
-      marker = L.marker([lat, long]);
+      marker = L.marker([lat, long], { icon: this.markerIcon });
     }
 
     markerCluster.addLayer(marker);
