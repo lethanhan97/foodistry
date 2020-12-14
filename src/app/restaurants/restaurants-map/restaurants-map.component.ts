@@ -22,7 +22,7 @@ export class RestaurantsMapComponent implements AfterViewInit, OnChanges {
   currentMarkerCluster: L.MarkerClusterGroup;
   markerIcon: L.Icon = L.icon({
     iconUrl: marker,
-    iconSize: [30, 42],
+    iconSize: [42, 42],
     iconAnchor: [15, 42],
   });
 
@@ -39,7 +39,7 @@ export class RestaurantsMapComponent implements AfterViewInit, OnChanges {
       const { lat, long } = changes.selectedRestaurant.currentValue.coords;
       const coords: L.LatLng = new L.LatLng(lat, long);
 
-      this.addMarker(lat, long, 'point');
+      this.addMarker([coords]); // array of 1 item because we only want to display 1
       this.map.setView(coords, 14);
     } else {
       // Display all restaurant markers
@@ -83,21 +83,17 @@ export class RestaurantsMapComponent implements AfterViewInit, OnChanges {
     tiles.addTo(this.map);
   }
 
-  private addMarker(lat: number, long: number, type: 'circle' | 'point'): void {
-    var markerCluster = L.markerClusterGroup();
-
+  private addMarker(coords: L.LatLng[]): void {
     if (this.currentMarkerCluster) {
       this.map.removeLayer(this.currentMarkerCluster);
     }
 
-    let marker;
-    if (type === 'circle') {
-      marker = L.circleMarker([lat, long]);
-    } else {
-      marker = L.marker([lat, long], { icon: this.markerIcon });
+    var markerCluster = L.markerClusterGroup();
+    for (let coord of coords) {
+      let marker = L.marker(coord, { icon: this.markerIcon });
+      markerCluster.addLayer(marker);
     }
 
-    markerCluster.addLayer(marker);
     markerCluster.addTo(this.map);
 
     this.currentMarkerCluster = markerCluster;
