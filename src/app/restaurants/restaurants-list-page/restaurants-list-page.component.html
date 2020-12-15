@@ -1,5 +1,5 @@
 <div class="wrapper">
-  <section>
+  <section (click)="reset()">
     <app-restaurants-list-item
       *ngFor="let restaurant of restaurants"
       [restaurant]="restaurant"

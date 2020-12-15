@@ -15,7 +15,8 @@ export class RestaurantsListItemComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onClick(): void {
+  onClick(event: MouseEvent): void {
+    event.stopPropagation();
     this.select.emit(this.restaurant);
   }
 }

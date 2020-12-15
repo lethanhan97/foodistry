@@ -9,6 +9,7 @@ import * as L from 'leaflet';
 import 'leaflet.markercluster';
 import { Restaurant } from '../restaurants.model';
 import marker from '../../../assets/marker.svg';
+import { RestaurantsService } from '../restaurants.service';
 
 @Component({
   selector: 'app-restaurants-map',
@@ -16,21 +17,25 @@ import marker from '../../../assets/marker.svg';
   styleUrls: ['./restaurants-map.component.scss'],
 })
 export class RestaurantsMapComponent implements AfterViewInit, OnChanges {
-  @Input() selectedRestaurant: Restaurant;
+  @Input() selectedRestaurant: Restaurant | undefined;
   map: L.Map;
-  currentCoords: L.LatLng;
-  currentMarkerCluster: L.MarkerClusterGroup;
-  markerIcon: L.Icon = L.icon({
+
+  private currentMarkerCluster: L.MarkerClusterGroup;
+  private allMarkerCluster: L.MarkerClusterGroup;
+  private markerIcon: L.Icon = L.icon({
     iconUrl: marker,
     iconSize: [42, 42],
     iconAnchor: [15, 42],
   });
 
-  constructor() {}
+  constructor(private restaurantsService: RestaurantsService) {}
 
   ngAfterViewInit(): void {
     this.initMap();
-    this.getCurrentLocation();
+    this.initAllMarkers();
+
+    this.currentMarkerCluster = this.allMarkerCluster;
+    this.allMarkerCluster.addTo(this.map);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -43,21 +48,31 @@ export class RestaurantsMapComponent implements AfterViewInit, OnChanges {
       this.map.setView(coords, 14);
     } else {
       // Display all restaurant markers
+      if (this.currentMarkerCluster) {
+        this.map.removeLayer(this.currentMarkerCluster);
+      }
+
+      if (this.allMarkerCluster) {
+        this.currentMarkerCluster = this.allMarkerCluster;
+        this.allMarkerCluster.addTo(this.map);
+      }
     }
   }
 
-  private getCurrentLocation(): void {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const { latitude, longitude } = position.coords;
-        const coords: L.LatLng = new L.LatLng(latitude, longitude);
+  initAllMarkers(): void {
+    const restaurants = this.restaurantsService.getAllRestaurants();
+    const markerCluster = L.markerClusterGroup();
 
-        this.currentCoords = coords;
-        this.map.setView(coords, 14);
-      });
-    } else {
-      console.log('geolocation not available');
+    for (let restaurant of restaurants) {
+      const { lat, long } = restaurant.coords;
+      const coords: L.LatLng = new L.LatLng(lat, long);
+
+      let marker = L.marker(coords, { icon: this.markerIcon });
+      markerCluster.addLayer(marker);
     }
+
+    console.log(markerCluster.getAllChildMarkers());
+    this.allMarkerCluster = markerCluster;
   }
 
   private initMap(): void {
@@ -88,14 +103,13 @@ export class RestaurantsMapComponent implements AfterViewInit, OnChanges {
       this.map.removeLayer(this.currentMarkerCluster);
     }
 
-    var markerCluster = L.markerClusterGroup();
+    const markerCluster = L.markerClusterGroup();
     for (let coord of coords) {
       let marker = L.marker(coord, { icon: this.markerIcon });
       markerCluster.addLayer(marker);
     }
 
     markerCluster.addTo(this.map);
-
     this.currentMarkerCluster = markerCluster;
   }
 }
