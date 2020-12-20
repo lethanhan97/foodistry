@@ -18,7 +18,11 @@ export class RestaurantsListPageComponent implements OnInit {
   }
 
   onSelect(restaurant: Restaurant): void {
-    this.selectedRestaurant = restaurant;
+    if (this.isSelected(restaurant)) {
+      this.selectedRestaurant = undefined;
+    } else {
+      this.selectedRestaurant = restaurant;
+    }
   }
 
   reset(): void {

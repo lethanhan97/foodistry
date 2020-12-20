@@ -1,5 +1,5 @@
 <div class="wrapper">
-  <section (click)="reset()">
+  <section (click)="reset()" class="list">
     <app-restaurants-list-item
       *ngFor="let restaurant of restaurants"
       [restaurant]="restaurant"
@@ -9,7 +9,7 @@
     </app-restaurants-list-item>
   </section>
 
-  <section style="background-color: yellow">
+  <section>
     <app-restaurants-map
       [selectedRestaurant]="selectedRestaurant"
     ></app-restaurants-map>

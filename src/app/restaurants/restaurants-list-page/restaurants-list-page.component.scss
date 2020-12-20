@@ -4,4 +4,9 @@
 
   display: grid;
   grid-template-columns: 1fr 5fr;
+
+  .list {
+    max-height: 100%;
+    overflow: scroll;
+  }
 }
