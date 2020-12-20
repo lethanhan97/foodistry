@@ -59,7 +59,7 @@ export class RestaurantsMapComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  initAllMarkers(): void {
+  private initAllMarkers(): void {
     const restaurants = this.restaurantsService.getAllRestaurants();
     const coords: L.LatLng[] = restaurants.map((restaurant) => {
       const { lat, long } = restaurant.coords;
@@ -72,19 +72,19 @@ export class RestaurantsMapComponent implements AfterViewInit, OnChanges {
     this.allMarkers = markers;
   }
 
-  addMarkersToMap(markers: L.Marker[]): void {
+  private addMarkersToMap(markers: L.Marker[]): void {
     for (let marker of markers) {
       marker.addTo(this.map);
     }
   }
 
-  removeMarkersFromMap(markers: L.Marker[]): void {
+  private removeMarkersFromMap(markers: L.Marker[]): void {
     for (let marker of markers) {
       this.map.removeLayer(marker);
     }
   }
 
-  createMarkers(coords: L.LatLng[]): L.Marker[] {
+  private createMarkers(coords: L.LatLng[]): L.Marker[] {
     const result: L.Marker[] = [];
 
     for (let coord of coords) {
@@ -95,7 +95,7 @@ export class RestaurantsMapComponent implements AfterViewInit, OnChanges {
     return result;
   }
 
-  resetMapView(): void {
+  private resetMapView(): void {
     this.map.setView([1.3521, 103.8198], 12);
   }
 
